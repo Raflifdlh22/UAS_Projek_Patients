@@ -1,5 +1,6 @@
 // import Model Patient
-const patientModel = require("../models/patientModel");
+const PatientModel = require("../models/patientModel");
+
 
 // buat class PatientController
 class PatientController {
@@ -30,7 +31,7 @@ class PatientController {
     try {
       // Dapatkan data dari request body
       const patientData = req.body;
-
+  
       // Validasi data
       if (!patientData.name || !patientData.age || !patientData.status) {
         return res.status(422).json({
@@ -38,18 +39,26 @@ class PatientController {
           statusCode: 422
         });
       }
-
+  
+      // Menambahkan data pasien baru ke database
       const result = await PatientModel.add(patientData);
-
+  
+      // Kirim hasil operasi ke client
       res.status(201).json({
         message: 'Resource is added successfully',
         data: result,
         statusCode: 201
       });
     } catch (error) {
-      res.status(500).json(error);
+      // Tangani kesalahan yang mungkin terjadi selama proses
+      console.error('Error in store:', error);
+      res.status(500).json({
+        message: 'Internal Server Error',
+        statusCode: 500
+      });
     }
   }
+  
 
   // Edit Resource
   async update(req, res) {

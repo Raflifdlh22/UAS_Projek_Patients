@@ -1,23 +1,21 @@
-// import express dan router
-const express = require("express");
-const router = require("./routes/api.js");
-
-// import dotenv dan menjalankan method config
-require("dotenv").config();
-
-// destructing object process.env
-const { APP_PORT } = process.env;
-
-// membuat object express
+// app/index.js atau app/app.js
+const express = require('express');
+const { validationRules, validate } = require('./validationMiddleware');
+const router = require('./src/routes/api');
 const app = express();
 
-// menggunakan middleware
 app.use(express.json());
 
-// menggunakan routing (router)
-app.use(router);
+// Middleware untuk validasi input
+app.use(validationRules());
 
-// mendefinisikan port
+// Middleware untuk menangkap hasil validasi
+app.use(validate);
+
+// Gunakan routing (router)
+app.use('/', router);
+
+const { APP_PORT } = process.env;
 app.listen(APP_PORT, () =>
   console.log(`Server running at: http://localhost:${APP_PORT}`)
 );
