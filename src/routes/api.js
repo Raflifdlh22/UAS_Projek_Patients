@@ -6,8 +6,12 @@ const express = require("express");
 // membuat object router
 const router = express.Router();
 // import controller
-const patientController = require("../controllers/patientController");
+const PatientController = require("../controllers/patientController");
+const PatientModel = require('../models/patientModel');
 
+
+
+const patientController = new PatientController(PatientModel);
 /**
  * Membuat routing
  */
